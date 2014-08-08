@@ -18,7 +18,7 @@ class Jenkins:
     self._url = 'http://localhost:{0}'.format(port)
     if not os.path.isfile(self._cli):
       urllib.request.urlretrieve(
-        '{0}/jnlpJars/jenkins-cli.jar'.format(self.url), self._cli)
+        '{0}/jnlpJars/jenkins-cli.jar'.format(self._url), self._cli)
 
   def _run_cli(self, command):
     return subprocess.check_output(['java', '-jar', self._cli, 
