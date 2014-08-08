@@ -6,8 +6,8 @@ clean:
 .PHONY: test
 test: 
 	vagrant up && \
-	vagrant ssh --command \
-	  'temp=$$(mktemp --directory) && \
-	   rsync --recursive --exclude=".*" /vagrant/* $$temp && \
+	vagrant ssh --command 'sudo su jenkins -c \
+	  "temp=$$(mktemp --directory) && \
+	   rsync --recursive --exclude='.*' /vagrant/* $$temp && \
 	   cd $$temp && \
-	   nosetests --verbose'
+	   nosetests --verbose"'
