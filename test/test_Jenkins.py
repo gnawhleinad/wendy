@@ -18,4 +18,9 @@ class TestInstall(unittest.TestCase):
 class TestInitialize(unittest.TestCase):
   def test_init(self):
     jenkins = Jenkins(PORT)
-    self.assertTrue(os.path.isfile(jenkins.cli))
+    self.assertTrue(os.path.isfile(jenkins._cli))
+
+class TestPlugin(unittest.TestCase):
+  def test_version(self):
+    jenkins=Jenkins(PORT)
+    self.assertIsNotNone(jenkins.get_plugin_version('ssh-credentials'))
