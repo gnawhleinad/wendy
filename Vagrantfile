@@ -47,6 +47,15 @@ sudo chown jenkins:jenkins org.codefirst.SimpleThemeDecorator.xml
 sudo mv org.codefirst.SimpleThemeDecorator.xml /var/lib/jenkins
 
 sudo service jenkins restart
+
+url="http://localhost:8080"
+status=`curl $url -L -s -o /dev/null -w "%{http_code}"`
+retry=0
+while [[ "$status" -ne 200 && "$retry" -lt 10 ]]; do
+  sleep 4.2
+  ((retry++))
+  status=`curl $url -L -s -o /dev/null -w "%{http_code}"`
+done
 SCRIPT
 
   config.vm.provision "shell", inline: $script
