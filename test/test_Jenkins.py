@@ -4,8 +4,8 @@ import unittest
 import urllib
 import os, sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from wendy import Jenkins
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 
+from wendy.jenkins import Jenkins
 
 PORT = 8080
 
@@ -22,5 +22,5 @@ class TestInitialize(unittest.TestCase):
 
 class TestPlugin(unittest.TestCase):
   def test_version(self):
-    jenkins=Jenkins(PORT)
+    jenkins = Jenkins(PORT)
     self.assertIsNotNone(jenkins.get_plugin_version('ssh-credentials'))

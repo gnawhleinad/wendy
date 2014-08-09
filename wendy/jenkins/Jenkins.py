@@ -1,65 +1,21 @@
 #!/usr/bin/python
 
-import os, subprocess
-import urllib
 import re
-import getpass
 import uuid
 
 from lxml import etree
 
-class InvalidHome(Exception):
-  def __init__(self, home):
-    self.home = home
-  def __str__(self):
-    return 'Invalid jenkins home "{0}"'.format(self.home)
-
-class InvalidHomeAccess(Exception):
-  def __init__(self, home):
-    self.home = home
-  def __str__(self):
-    return 'Invalid access for user "{0}" at jenkins home "{1}"'.format(
-      getpass.getuser(),
-      self.home)
+from .Parameters import Parameters
+from .CLI import CLI
 
 class Jenkins:
   def __init__(self, port=None, home=None):
-    if port is None:
-      port = 8080
-
-    if home is None:
-      home = '/var/lib/jenkins'
-
-    self._home = home
-    if os.path.isdir(self._home):
-      if not os.access(self._home, os.W_OK):
-        raise InvalidHomeAccess(self._home)
-    else:
-      raise InvalidHome(self._home)
-
-    cli_location = '/usr/local/jenkins-cli'
-    if not os.path.isdir(cli_location) or not os.access(cli_location, os.W_OK):
-      cli_location = os.path.join(os.path.expanduser('~'), 
-                                  '.wendy/jenkins-cli')
-      if not os.path.isdir(cli_location):
-        # http://bugs.python.org/issue21082
-        os.makedirs(cli_location, exist_ok=True)
-
-    self._cli = os.path.join(cli_location, 'jenkins-cli.jar')
-    self._url = 'http://localhost:{0}'.format(port)
-    if not os.path.isfile(self._cli):
-      urllib.request.urlretrieve(
-        '{0}/jnlpJars/jenkins-cli.jar'.format(self._url), self._cli)
-
-  def _run_cli(self, command):
-    return subprocess.check_output(['java', '-jar', self._cli, 
-                                            '-s', self._url,
-                                            command],
-                                   universal_newlines=True)
+    self._parameters = Parameter(port, home)
+    self.cli = CLI(self._paramters)
 
   def get_plugin_version(self, plugin):
     return re.match('.*\n{0}\s+[^\n]*?([\d\.]+)'.format(plugin),
-                    self._run_cli('list-plugins'), 
+                    self.cli.run('list-plugins'), 
                     re.MULTILINE|re.DOTALL)
 
   def add_credential(self, username, description, private_key_location):
