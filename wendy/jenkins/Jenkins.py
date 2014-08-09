@@ -10,8 +10,8 @@ from .CLI import CLI
 
 class Jenkins:
   def __init__(self, port=None, home=None):
-    self._parameters = Parameter(port, home)
-    self.cli = CLI(self._paramters)
+    self._parameters = Parameters(port, home)
+    self.cli = CLI(self._parameters)
 
   def get_plugin_version(self, plugin):
     return re.match('.*\n{0}\s+[^\n]*?([\d\.]+)'.format(plugin),
