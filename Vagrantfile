@@ -13,7 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.customize ["modifyvm", :id, "--cpus", 1]
   end
 
-  config.vm.network :forwarded_port, guest: 8080, host: 4242
+  config.vm.network :forwarded_port, guest: 8080, host: 8080
 
   $script = <<SCRIPT
 touch /home/vagrant/.bash_aliases && echo "alias python=python3" > /home/vagrant/.bash_aliases
@@ -40,8 +40,8 @@ cd /var/lib/jenkins/userContent/doony && sudo git checkout 1.6 && cd -
 touch org.codefirst.SimpleThemeDecorator.xml
 cat > org.codefirst.SimpleThemeDecorator.xml << CAN_WE_FIX_IT
 <org.codefirst.SimpleThemeDecorator plugin="simple-theme-plugin@0.3">
-  <cssUrl>http://localhost:4242/userContent/doony/doony.css</cssUrl>
-  <jsUrl>http://localhost:4242/userContent/doony/doony.js</jsUrl>
+  <cssUrl>http://localhost:8080/userContent/doony/doony.css</cssUrl>
+  <jsUrl>http://localhost:8080/userContent/doony/doony.js</jsUrl>
 </org.codefirst.SimpleThemeDecorator>
 CAN_WE_FIX_IT
 sudo chown jenkins:jenkins org.codefirst.SimpleThemeDecorator.xml
