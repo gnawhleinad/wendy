@@ -10,7 +10,9 @@ before_script:
   - sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
   - sudo apt-get update -qq
   - sudo apt-get install -y jenkins
+  - sudo usermod -a -G jenkins $USER
   - python test/wait.py
-script: sudo -E su jenkins -c "source $HOME/virtualenv/python$TRAVIS_PYTHON_VERSION/bin/activate; pip install nose lxml; nosetests test --verbose"
+  - pip install lxml
+script: sudo -E su $USER -c 'nosetests test --verbose'
 notifications:
   email: false
