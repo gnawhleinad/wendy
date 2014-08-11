@@ -11,8 +11,8 @@ before_script:
   - sudo apt-get update -qq
   - sudo apt-get install -y jenkins
   - python test/wait.py
-  - sudo su jenkins -c "source $HOME/virtualenv/python$TRAVIS_PYTHON_VERSION/bin/activate"
-  - sudo su jenkins -c 'pip install nose lxml'
-script: sudo su jenkins -c 'nosetests test --verbose'
+  - sudo -E su jenkins -c "source $HOME/virtualenv/python$TRAVIS_PYTHON_VERSION/bin/activate"
+  - sudo -E su jenkins -c 'pip install nose lxml'
+script: sudo -E su jenkins -c 'nosetests test --verbose'
 notifications:
   email: false
