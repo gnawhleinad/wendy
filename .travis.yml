@@ -3,16 +3,17 @@ python:
   - "3.3"
   - "3.4"
 install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y libxml2-dev libxslt1-dev lib32z1-dev
-before_script:
   - wget -q -O - http://pkg.jenkins-ci.org/debian-stable/jenkins-ci.org.key | sudo apt-key add -
   - sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
   - sudo apt-get update -qq
   - sudo apt-get install -y jenkins
+  - sudo apt-get update -qq
+  - sudo apt-get install -y libxml2-dev libxslt1-dev lib32z1-dev
+  - pip install lxml
+before_script:
+  - sudo chmod -R g+w /var/lib/jenkins
   - sudo usermod -a -G jenkins $USER
   - python test/wait.py
-  - pip install lxml
 script: sudo -E su $USER -c 'source $HOME/virtualenv/python$TRAVIS_PYTHON_VERSION/bin/activate; nosetests test --verbose'
 notifications:
   email: false
