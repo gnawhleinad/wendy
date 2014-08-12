@@ -7,8 +7,8 @@ clean:
 test: 
 	vagrant up && \
 	vagrant ssh --command \
-	  "temp=$$(mktemp --directory) && \
-	   rsync --recursive --exclude='.*' /vagrant/* $$temp && \
+	  'temp=$$(mktemp --directory) && \
+	   rsync --recursive --exclude=".*" /vagrant/* $$temp && \
 	   cd $$temp && \
-	   sudo chown -R jenkins:jenkins $$temp && \
-	   sudo su jenkins -c 'nosetests --verbose'"
+	   sudo chown --recursive jenkins:jenkins $$temp && \
+	   sudo -E su jenkins --command "nosetests --verbose"'
