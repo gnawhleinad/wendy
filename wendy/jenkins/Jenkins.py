@@ -24,7 +24,8 @@ class Jenkins:
 
     credentials = None
     if os.path.isfile(credentials_file):
-      credentials = etree.parse(credentials_file)
+      parser = etree.XMLParser(remove_blank_text=True)
+      credentials = etree.parse(credentials_file, parser)
     else:
       credentials = self._create_credentials()
 
@@ -39,11 +40,11 @@ class Jenkins:
                                                 description, 
                                                 private_key_location))
 
-    credentials.write(credentials_file, 
-      xml_declaration=True, encoding='UTF-8', pretty_print=True)
-    # with open(credentials_file, 'w') as f:
-    #   f.write(etree.tostring(credentials, 
-    #             xml_declaration=True, encoding='UTF-8', pretty_print=True))
+    with open(credentials_file, 'w') as f:
+      f.write(etree.tostring(credentials,
+                             xml_declaration=True,
+                             encoding='UTF-8',
+                             pretty_print=True).decode('utf-8'))
 
   def _add_credential(self, 
                       username, 
