@@ -14,12 +14,27 @@ class Jenkins:
     self._parameters = Parameters(port, home)
     self.cli = CLI(self._parameters)
 
+  def reload_configuration(self, reload_configuration):
+    if reload_configuration:
+      self.cli.run('reload-configuration')
+
+  def restart(self, restart):
+    if restart:
+      self.cli.run('restart')
+
   def get_plugin_version(self, plugin):
     return re.match('.*\n{0}\s+[^\n]*?([\d\.]+)'.format(plugin),
                     self.cli.run('list-plugins'), 
                     re.MULTILINE|re.DOTALL).group(1)
 
-  def add_credential(self, username, description, private_key_location):
+  def add_credential(self,
+                     username,
+                     description,
+                     private_key_location,
+                     restart=None):
+    if restart is None:
+      restart = True
+
     credentials_file = os.path.join(self._parameters.home, 'credentials.xml')
 
     credentials = None
@@ -45,6 +60,8 @@ class Jenkins:
                              xml_declaration=True,
                              encoding='UTF-8',
                              pretty_print=True).decode('utf-8'))
+
+    self.restart(restart)
 
   def _add_credential(self, 
                       username, 
