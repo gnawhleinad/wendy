@@ -9,7 +9,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider "virtualbox" do |v, override|
     v.gui = false
-    v.customize ["modifyvm", :id, "--memory", 1024]
+    v.customize ["modifyvm", :id, "--memory", 2048]
     v.customize ["modifyvm", :id, "--cpus", 1]
   end
 
@@ -21,33 +21,13 @@ sudo apt-get update && sudo apt-get install -y python3-pip
 sudo pip3 install nose
 sudo apt-get install -y libxml2-dev libxslt1-dev lib32z1-dev && sudo pip3 install lxml
 
-wget -q -O - http://pkg.jenkins-ci.org/debian-stable/jenkins-ci.org.key | sudo apt-key add -
-sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-sudo apt-get update && sudo apt-get install -y jenkins
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+sudo sh -c "echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
+sudo apt-get update && sudo apt-get install -y lxc-docker
 
-wget https://updates.jenkins-ci.org/latest/jquery.hpi
-wget https://updates.jenkins-ci.org/latest/simple-theme-plugin.hpi
-wget https://updates.jenkins-ci.org/latest/scm-api.hpi
-wget https://updates.jenkins-ci.org/latest/git-client.hpi
-wget https://updates.jenkins-ci.org/latest/git.hpi
-sudo mv *.hpi /var/lib/jenkins/plugins
-
-sudo apt-get install -y git
-touch known_hosts && ssh-keyscan -H github.com >> known_hosts && sudo chown root:root known_hosts && sudo mv known_hosts /root/.ssh
-
-cd /var/lib/jenkins/userContent && sudo git clone https://github.com/kevinburke/doony.git && cd -
-cd /var/lib/jenkins/userContent/doony && sudo git checkout 1.6 && cd -
-touch org.codefirst.SimpleThemeDecorator.xml
-cat > org.codefirst.SimpleThemeDecorator.xml << CAN_WE_FIX_IT
-<org.codefirst.SimpleThemeDecorator plugin="simple-theme-plugin@0.3">
-  <cssUrl>http://localhost:8080/userContent/doony/doony.css</cssUrl>
-  <jsUrl>http://localhost:8080/userContent/doony/doony.js</jsUrl>
-</org.codefirst.SimpleThemeDecorator>
-CAN_WE_FIX_IT
-sudo chown jenkins:jenkins org.codefirst.SimpleThemeDecorator.xml
-sudo mv org.codefirst.SimpleThemeDecorator.xml /var/lib/jenkins
-
-sudo service jenkins restart
+cd /vagrant/dev && sudo docker build -t wendy-dev . && cd -
+mkdir -p /var/lib/jenkins
+sudo docker run -d -p 8080:8080 -v /var/lib/jenkins:/var/lib/jenkins -t wendy-dev
 
 url="http://localhost:8080"
 status=`curl $url -L -s -o /dev/null -w "%{http_code}"`
