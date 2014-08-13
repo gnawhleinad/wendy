@@ -13,18 +13,24 @@ class Jenkins:
   def __init__(self, port=None, home=None):
     self._parameters = Parameters(port, home)
     self.cli = CLI(self._parameters)
+    self.__list_plugins = None
 
   def reload_configuration(self, reload_configuration):
     if reload_configuration:
       self.cli.run('reload-configuration')
+      self.__list_plugins = None
 
   def restart(self, restart):
     if restart:
       self.cli.run('restart')
+      self.__list_plugins = None
 
   def get_plugin_version(self, plugin):
+    if self.__list_plugins is None:
+      self.__list_plugins = self.cli.run('list-plugins')
+
     return re.match('.*\n{0}\s+[^\n]*?([\d\.]+)'.format(plugin),
-                    self.cli.run('list-plugins'), 
+                    self.__list_plugins,
                     re.MULTILINE|re.DOTALL).group(1)
 
   def add_credential(self,
