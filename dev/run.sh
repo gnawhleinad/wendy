@@ -13,8 +13,8 @@ touch known_hosts && ssh-keyscan -H github.com >> known_hosts && chown root:root
 
 mkdir -p /var/lib/jenkins/userContent
 
-cd /var/lib/jenkins/userContent && git clone https://github.com/kevinburke/doony.git && cd -
-cd /var/lib/jenkins/userContent/doony && git checkout 1.6 && cd -
+(cd /var/lib/jenkins/userContent && git clone https://github.com/kevinburke/doony.git)
+(cd /var/lib/jenkins/userContent/doony && git checkout 1.6)
 touch org.codefirst.SimpleTheeDecorator.xml
 cat > org.codefirst.SimpleThemeDecorator.xml << CAN_WE_FIX_IT
 <org.codefirst.SimpleThemeDecorator plugin="simple-theme-plugin@0.3">

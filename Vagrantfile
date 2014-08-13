@@ -25,7 +25,7 @@ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869
 sudo sh -c "echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
 sudo apt-get update && sudo apt-get install -y lxc-docker
 
-cd /vagrant/dev && sudo docker build -t wendy-dev . && cd -
+(cd /vagrant/dev && sudo docker build -t wendy-dev .)
 mkdir -p /var/lib/jenkins
 sudo docker run -d -p 8080:8080 -v /var/lib/jenkins:/var/lib/jenkins -t wendy-dev
 
