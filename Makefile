@@ -10,5 +10,5 @@ test:
 	  'temp=$$(mktemp --directory) && \
 	   rsync --recursive --exclude=".*" /vagrant/* $$temp && \
 	   cd $$temp && \
-	   sudo chown --recursive jenkins:jenkins $$temp && \
-	   sudo -E su jenkins --command "nosetests --verbose"'
+	   sudo chown --recursive vagrant:vagrant /var/lib/jenkins && \
+	   nosetests --verbose'
