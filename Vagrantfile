@@ -31,14 +31,17 @@ sudo apt-get update && sudo apt-get install -y lxc-docker
 mkdir -p /var/lib/jenkins
 sudo docker run -d -p 8080:8080 -v /var/lib/jenkins:/var/lib/jenkins -t wendy-dev
 
-url="http://localhost:8080"
-status=`curl $url -L -s -o /dev/null -w "%{http_code}"`
-retry=0
-while [[ "$status" -ne 200 && "$retry" -lt 10 ]]; do
-  sleep 4.2
-  ((retry++))
+function wait {
+  url="http://localhost:8080"
   status=`curl $url -L -s -o /dev/null -w "%{http_code}"`
-done
+  retry=0
+  while [[ "$status" -ne 200 && "$retry" -lt 10 ]]; do
+    sleep 4.2
+    ((retry++))
+    status=`curl $url -L -s -o /dev/null -w "%{http_code}"`
+  done
+}
+wait || true
 SCRIPT
 
   config.vm.provision "shell", inline: $script
