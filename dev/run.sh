@@ -26,4 +26,4 @@ mv org.codefirst.SimpleThemeDecorator.xml /var/lib/jenkins
 
 chown -R jenkins:jenkins /var/lib/jenkins
 
-exec su jenkins -c "java -jar /usr/share/jenkins/jenkins.war"
+exec su jenkins -c "java -Dhudson.diyChunking=false -jar /usr/share/jenkins/jenkins.war"
