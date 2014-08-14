@@ -19,7 +19,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 touch /home/vagrant/.bash_aliases && echo "alias python=python3" > /home/vagrant/.bash_aliases
 sudo apt-get update && sudo apt-get install -y python3-pip
 sudo pip3 install nose
-sudo apt-get install -y libxml2-dev libxslt1-dev lib32z1-dev && sudo pip3 install lxml
+sudo apt-get update && sudo apt-get install -y libxml2-dev libxslt1-dev lib32z1-dev && sudo pip3 install lxml
+
+sudo apt-get update && sudo apt-get install -y openjdk-7-jre-headless
 
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
 sudo sh -c "echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
