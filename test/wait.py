@@ -2,6 +2,7 @@
 
 import urllib
 import time
+import math
 
 PORT = 8080
 
@@ -11,12 +12,12 @@ def check():
 def main():
   code = 0
   retry = 0
-  while code != 200 and retry < 10:
+  while code != 200 and retry < 5:
     retry += 1
     try:
       code = check()
     except:
-      time.sleep(4.2)
+      time.sleep(math.pow(4.2, retry))
       pass
 
 if __name__ == '__main__':
