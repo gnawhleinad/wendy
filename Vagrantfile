@@ -28,7 +28,7 @@ sudo sh -c "echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources
 sudo apt-get update && sudo apt-get install -y lxc-docker && sudo pip3 install docker-py
 sudo usermod -a -G docker vagrant && sudo su -l vagrant
 
-(cd /vagrant/dev && sudo docker build -t wendy-dev .)
+(cd /vagrant/dev && sudo docker build -t wendy/dev .)
 mkdir -p /var/lib/jenkins
 SCRIPT
 
