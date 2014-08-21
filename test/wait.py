@@ -4,12 +4,10 @@ import urllib
 import time
 import math
 
-PORT = 8080
+def check(port):
+  return urllib.request.urlopen('http://localhost:{0}'.format(port)).getcode()
 
-def check():
-  return urllib.request.urlopen('http://localhost:{0}'.format(PORT)).getcode()
-
-def main():
+def main(port):
   time.sleep(314/60)
 
   code = 0
@@ -17,7 +15,7 @@ def main():
   while code != 200 and retry < 5:
     retry += 1
     try:
-      code = check()
+      code = check(port)
     except:
       time.sleep(math.pow(4.2, retry))
       pass

@@ -9,7 +9,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from wendy.jenkins.Jenkins import Jenkins
 from test import wait
 
-PORT = 8080
+PORT = 4242
+DATA = '/var/lib/jenkins/test'
 
 class DockerTestCase(unittest.TestCase):
   def __init__(self, *args, **kwargs):
@@ -21,12 +22,16 @@ class DockerTestCase(unittest.TestCase):
     super(DockerTestCase, self).__init__(*args, **kwargs)
 
   def setUp(self):
+    subprocess.check_call(['/bin/bash', '-c',
+      os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                   'permission.sh')])
+    os.mkdir(DATA)
     self._client.start(self._container, 
                        binds={'/var/lib/jenkins': {
-                                'bind': '/var/lib/jenkins', 
+                                'bind': DATA,
                                 'ro': False}}, 
-                       port_bindings={8080:8080})
-    wait.main()
+                       port_bindings={8080:PORT})
+    wait.main(PORT)
     subprocess.check_call(['/bin/bash', '-c', 
       os.path.join(os.path.dirname(os.path.abspath(__file__)), 
                    'permission.sh')])
