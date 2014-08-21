@@ -14,7 +14,7 @@ install:
   - pip install docker-py
 before_script:
   - sudo usermod -a -G docker $USER
-  - sudo -E su $USER -c 'cd /vagrant/dev && sudo docker build -t wendy/dev .'
+  - sudo -E su $USER -c 'cd $TRAVIS_BUILD_DIR/dev && sudo docker build -t wendy/dev .'
 script: sudo -E su $USER -c 'source $HOME/virtualenv/python$TRAVIS_PYTHON_VERSION/bin/activate; nosetests --verbose'
 notifications:
   email: false
