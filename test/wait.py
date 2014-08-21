@@ -10,6 +10,8 @@ def check():
   return urllib.request.urlopen('http://localhost:{0}'.format(PORT)).getcode()
 
 def main():
+  time.sleep(314/60)
+
   code = 0
   retry = 0
   while code != 200 and retry < 5:
