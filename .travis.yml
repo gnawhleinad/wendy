@@ -3,17 +3,17 @@ python:
   - "3.3"
   - "3.4"
 install:
-  - wget -q -O - http://pkg.jenkins-ci.org/debian-stable/jenkins-ci.org.key | sudo apt-key add -
-  - sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-  - sudo apt-get update -qq
-  - sudo apt-get install -y jenkins
   - sudo apt-get update -qq
   - sudo apt-get install -y libxml2-dev libxslt1-dev lib32z1-dev
   - pip install lxml
+  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+  - sudo sh -c "echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
+  - sudo apt-get update -qq
+  - sudo apt-get install -y lxc-docker
+  - pip install docker-py
 before_script:
-  - sudo chmod -R g+w /var/lib/jenkins
-  - sudo usermod -a -G jenkins $USER
-  - python test/wait.py
-script: sudo -E su $USER -c 'source $HOME/virtualenv/python$TRAVIS_PYTHON_VERSION/bin/activate; nosetests test --verbose'
+  - sudo usermod -a -G docker $USER
+  - sudo -E su $USER -c 'cd /vagrant/dev && sudo docker build -t wendy/dev .'
+script: sudo -E su $USER -c 'source $HOME/virtualenv/python$TRAVIS_PYTHON_VERSION/bin/activate; nosetests --verbose'
 notifications:
   email: false
