@@ -20,10 +20,12 @@ class DockerTestCase(unittest.TestCase):
     super(DockerTestCase, self).__init__(*args, **kwargs)
 
   def setUp(self):
-    permission = os.path.join(
-      os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-      'util',
-      'permission.sh')
+    permission = '{0} {1}'.format(
+      os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        'util',
+        'permission.sh'),
+      '$(id -gn)')
     subprocess.check_call(['/bin/bash', '-c', permission])
     os.mkdir(HOME)
     self._client.start(self._container, 

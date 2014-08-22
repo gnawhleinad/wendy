@@ -1,20 +1,23 @@
 #!/bin/bash
 
-mkdir -p /var/lib/jenkins/plugins
+start=${1:-false}
+restart=${2:-false}
+
+sudo mkdir -p /var/lib/jenkins/plugins
 
 wget https://updates.jenkins-ci.org/latest/jquery.hpi
 wget https://updates.jenkins-ci.org/latest/simple-theme-plugin.hpi
 wget https://updates.jenkins-ci.org/latest/scm-api.hpi
 wget https://updates.jenkins-ci.org/latest/git-client.hpi
 wget https://updates.jenkins-ci.org/latest/git.hpi
-mv *.hpi /var/lib/jenkins/plugins
+sudo mv *.hpi /var/lib/jenkins/plugins
 
-touch known_hosts && ssh-keyscan -H github.com >> known_hosts && chown root:root known_hosts && mv known_hosts /root/.ssh
+touch known_hosts && ssh-keyscan -H github.com >> known_hosts && sudo chown root:root known_hosts && sudo mv known_hosts /root/.ssh
 
-mkdir -p /var/lib/jenkins/userContent
+sudo mkdir -p /var/lib/jenkins/userContent
 
-(cd /var/lib/jenkins/userContent && git clone https://github.com/kevinburke/doony.git)
-(cd /var/lib/jenkins/userContent/doony && git checkout 1.6)
+(cd /var/lib/jenkins/userContent && sudo git clone https://github.com/kevinburke/doony.git)
+(cd /var/lib/jenkins/userContent/doony && sudo git checkout 1.6)
 touch org.codefirst.SimpleTheeDecorator.xml
 cat > org.codefirst.SimpleThemeDecorator.xml << CAN_WE_FIX_IT
 <org.codefirst.SimpleThemeDecorator plugin="simple-theme-plugin@0.3">
@@ -22,8 +25,13 @@ cat > org.codefirst.SimpleThemeDecorator.xml << CAN_WE_FIX_IT
   <jsUrl>http://localhost:8080/userContent/doony/doony.js</jsUrl>
 </org.codefirst.SimpleThemeDecorator>
 CAN_WE_FIX_IT
-mv org.codefirst.SimpleThemeDecorator.xml /var/lib/jenkins
+sudo mv org.codefirst.SimpleThemeDecorator.xml /var/lib/jenkins
 
-chown -R jenkins:jenkins /var/lib/jenkins
+if $start; then
+	chown -R jenkins:jenkins /var/lib/jenkins
+	exec su jenkins -c "java -Dhudson.diyChunking=false -jar /usr/share/jenkins/jenkins.war"
+fi
 
-exec su jenkins -c "java -Dhudson.diyChunking=false -jar /usr/share/jenkins/jenkins.war"
+if $restart; then
+	sudo service jenkins restart
+fi

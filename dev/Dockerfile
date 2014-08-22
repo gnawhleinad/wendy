@@ -13,6 +13,6 @@ ENV JENKINS_HOME /var/lib/jenkins
 EXPOSE 8080
 
 ADD run.sh /usr/local/bin/run
-RUN chmod +x /usr/local/bin/run
+RUN chmod +x /usr/local/bin/run true
 
-CMD /usr/local/bin/run
+CMD /usr/local/bin/run true
