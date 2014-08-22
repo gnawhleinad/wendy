@@ -29,9 +29,8 @@ class AptTestCase(unittest.TestCase):
         '$(id -gn)')])
     subprocess.check_call(
       ['/bin/bash',
-       os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
-                      os.path.abspath(__file__)))),
-                    'dev', 
+       os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                    'util', 
                     'run.sh'),
        'false',
        'true'])
