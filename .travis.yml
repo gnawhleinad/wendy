@@ -3,9 +3,9 @@ python:
   - "3.3"
   - "3.4"
 install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y libxml2-dev libxslt1-dev lib32z1-dev
+  - sudo apt-get update -qq && sudo apt-get install -y libxml2-dev libxslt1-dev lib32z1-dev
   - pip install lxml
+  - sudo apt-get update -qq && sudo apt-get install -y openjdk-7-jre-headless
   - wget -q -O - http://pkg.jenkins-ci.org/debian-stable/jenkins-ci.org.key | sudo apt-key add -
   - sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
 script: sudo -E su $USER -c 'source $HOME/virtualenv/python$TRAVIS_PYTHON_VERSION/bin/activate; nosetests --verbose'
